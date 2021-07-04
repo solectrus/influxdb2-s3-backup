@@ -17,7 +17,7 @@ export BACKUP_PATH=${BACKUP_PATH:-/data/influxdb/backup}
 export BACKUP_ARCHIVE_PATH=${BACKUP_ARCHIVE_PATH:-${BACKUP_PATH}.tgz}
 export INFLUXDB_HOST=${INFLUXDB_HOST:-influxdb}
 export INFLUXDB_ORG=${INFLUXDB_ORG:-influx}
-export INFLUXDB_BACKUP_PORT=${INFLUXDB_BACKUP_PORT:-8088}
+export INFLUXDB_BACKUP_PORT=${INFLUXDB_BACKUP_PORT:-8086}
 export CRON=${CRON:-"0 0 * * 0"}
 
 export DATETIME=$(date "+%Y%m%d%H%M%S")
@@ -33,7 +33,6 @@ startcron() {
   echo "export BACKUP_PATH=$BACKUP_PATH" >> $HOME/.profile
   echo "export BACKUP_ARCHIVE_PATH=$BACKUP_ARCHIVE_PATH" >> $HOME/.profile
   echo "export DATETIME=$DATETIME" >> $HOME/.profile
-  echo "export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION" >> $HOME/.profile
   echo "export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $HOME/.profile
   echo "export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $HOME/.profile
   echo "Starting backup cron job with frequency '$1'"
