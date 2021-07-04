@@ -11,8 +11,19 @@ services:
   influxdb:
     image: influxdb:2.0.7
     environment:
-      INFLUXDB_DB: mydb
-      INFLUXDB_BIND_ADDRESS: 0.0.0.0:8088
+      DOCKER_INFLUXDB_INIT_MODE: "setup"
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN}
+      DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_ORG}
+      DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_DEFAULT_BUCKET}
+      DOCKER_INFLUXDB_BOLT_PATH: "/var/lib/influxdb2/influxdb.bolt"
+      DOCKER_INFLUXDB_ENGINE_PATH: "var/lib/influxdb2/engine"
+      INFLUXDB_META_DIR: "var/lib/influxdb2/meta"
+      INFLUXDB_REPORTING_DISABLED: "false"
+      INFLUXD_LOG_LEVEL: "info"
+      INFLUXD_BIND_ADDRESS: ":8088"
+      
   fluxbackup:
     image: buraketmen/influxdb2-s3-backup:latest
     environment:
