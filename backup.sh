@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-
+export PATH=$PATH:usr/local/bin/influx
 export S3_BUCKET=${S3_BUCKET}
 : ${S3_BUCKET:?"S3_BUCKET env variable is required"}
 : ${AWS_SECRET_ACCESS_KEY:?"AWS_SECRET_ACCESS_KEY env variable is required"}
@@ -18,12 +18,12 @@ export BACKUP_ARCHIVE_PATH=${BACKUP_ARCHIVE_PATH:-${BACKUP_PATH}.tgz}
 export INFLUXDB_HOST=${INFLUXDB_HOST:-influxdb}
 export INFLUXDB_ORG=${INFLUXDB_ORG:-influx}
 export INFLUXDB_BACKUP_PORT=${INFLUXDB_BACKUP_PORT:-8086}
-export CRON=${CRON:-"0 0 * * 0"}
-
+export CRON=${CRON:-"* * 0 0 *"}
 export DATETIME=$(date "+%Y%m%d%H%M%S")
 
 # Add this script to the crontab and start crond
 startcron() {
+  echo "export PATH=$PATH:user/local/bin/influx" >> $HOME/.profile
   echo "export S3_BUCKET=$S3_BUCKET" >> $HOME/.profile
   echo "export S3_PREFIX=$S3_PREFIX" >> $HOME/.profile
   echo "export INFLUXDB_HOST=$INFLUXDB_HOST" >> $HOME/.profile
@@ -59,7 +59,7 @@ backup() {
     rm -rf $BACKUP_PATH
   fi
   mkdir -p $BACKUP_PATH
-  influx backup --host $INFLUXDB_HOST:$INFLUXDB_BACKUP_PORT --org $INFLUXDB_ORG --token $INFLUXDB_TOKEN $BACKUP_PATH
+  influx backup --host http://$INFLUXDB_HOST:$INFLUXDB_BACKUP_PORT --org $INFLUXDB_ORG --token $INFLUXDB_TOKEN $BACKUP_PATH/
   if [ $? -ne 0 ]; then
     echo "Failed to backup to $BACKUP_PATH"
     exit 1
