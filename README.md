@@ -10,6 +10,8 @@ version: '3.5'
 services:
   influxdb:
     image: influxdb:2.0.7
+    ports:
+      - "8086:8086"
     environment:
       DOCKER_INFLUXDB_INIT_MODE: "setup"
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
@@ -22,7 +24,7 @@ services:
       INFLUXDB_META_DIR: "var/lib/influxdb2/meta"
       INFLUXDB_REPORTING_DISABLED: "false"
       INFLUXD_LOG_LEVEL: "info"
-      INFLUXD_BIND_ADDRESS: ":8088"
+      INFLUXD_BIND_ADDRESS: ":8086
       
   fluxbackup:
     image: buraketmen/influxdb2-s3-backup:latest
@@ -30,7 +32,7 @@ services:
       INFLUXDB_HOST: influxdb
       INFLUXDB_ORG: ${INFLUXDB_ORG}
       INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
-      INFLUXDB_BACKUP_PORT: 8088
+      INFLUXDB_BACKUP_PORT: 8086
       BACKUP_PATH: '/data/influxdb/backup'
       S3_BUCKET: 'bucket_name'
       S3_PREFIX: 'influxdb_backup'
