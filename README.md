@@ -24,7 +24,7 @@ services:
       INFLUXDB_META_DIR: "var/lib/influxdb2/meta"
       INFLUXDB_REPORTING_DISABLED: "false"
       INFLUXD_LOG_LEVEL: "info"
-      INFLUXD_BIND_ADDRESS: ":8086
+      INFLUXD_BIND_ADDRESS: ":8086"
       
   fluxbackup:
     image: buraketmen/influxdb2-s3-backup:latest
