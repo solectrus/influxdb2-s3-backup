@@ -113,9 +113,9 @@ restore() {
     echo "Failed to download latest backup"
     exit 1
   fi
-
+  mkdir -p $BACKUP_PATH
   # Extract archive
-  tar -xvzf $BACKUP_ARCHIVE_PATH -C /
+  tar -xvzf $BACKUP_ARCHIVE_PATH -c $BACKUP_PATH
 
   # Restore database from backup file
   echo "Running restore"
