@@ -6,6 +6,9 @@ export S3_BUCKET=${S3_BUCKET}
 : ${S3_BUCKET:?"S3_BUCKET env variable is required"}
 : ${AWS_SECRET_ACCESS_KEY:?"AWS_SECRET_ACCESS_KEY env variable is required"}
 : ${AWS_ACCESS_KEY_ID:?"AWS_ACCESS_KEY_ID env variable is required"}
+: ${INFLUXDB_HOST:?"INFLUXDB_HOST env variable is required"}
+: ${INFLUXDB_ORG:?"INFLUXDB_ORG env variable is required"}
+: ${INFLUXDB_TOKEN:?"INFLUXDB_TOKEN env variable is required"}
 if [[ -z ${S3_PREFIX} ]]; then
   export S3_PREFIX=""
 else
