@@ -12,6 +12,8 @@ services:
     image: influxdb:2.0.7
     ports:
       - "8086:8086"
+    networks:
+      - flux-proxy
     environment:
       DOCKER_INFLUXDB_INIT_MODE: "setup"
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
@@ -28,15 +30,17 @@ services:
       
   fluxbackup:
     image: buraketmen/influxdb2-s3-backup:latest
+    networks:
+      - flux-proxy
     environment:
       INFLUXDB_HOST: influxdb
       INFLUXDB_ORG: ${INFLUXDB_ORG}
       INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
       INFLUXDB_BACKUP_PORT: 8086
-      BACKUP_PATH: '/data/influxdb/backup'
-      S3_BUCKET: 'bucket_name'
+      BACKUP_PATH: "/data/influxdb/backup"
+      S3_BUCKET: 'S3_bucket_name'
       S3_PREFIX: 'influxdb_backup'
-      AWS_ACCESS_KEY_ID: access_key
-      AWS_SECRET_ACCESS_KEY: secret_key
+      AWS_ACCESS_KEY_ID:  ${AWS_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_KEY}
       CRON: '0 0 * * 0'
 ```
