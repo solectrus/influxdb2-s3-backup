@@ -21,7 +21,6 @@ export INFLUXDB_BACKUP_PORT=${INFLUXDB_BACKUP_PORT:-8086}
 export CRON=${CRON:-"* * 0 0 *"}
 export DATETIME=$(date "+%Y%m%d%H%M%S")
 
-# Add this script to the crontab and start crond
 startcron() {
   echo "export PATH=$PATH:user/local/bin/influx" >> $HOME/.profile
   echo "export S3_BUCKET=$S3_BUCKET" >> $HOME/.profile
@@ -40,20 +39,12 @@ startcron() {
   echo "$1 . $HOME/.profile; $0 backup >> /var/log/cron.log 2>&1" > /etc/cron.d/influxdbbackup
 
   cat /etc/cron.d/influxdbbackup
-
-  # Apply cron job
   crontab /etc/cron.d/influxdbbackup
-
-  # Create the log file to be able to run tail
   touch /var/log/cron.log
-
-  # cat /var/spool/cron/crontabs/root
   cron && tail -f /var/log/cron.log
 }
 
-# Dump the database to a file and push it to S3
 backup() {
-  # Dump database to directory
   echo "Backing up to $BACKUP_PATH"
   if [ -d $BACKUP_PATH ]; then
     rm -rf $BACKUP_PATH
@@ -65,13 +56,11 @@ backup() {
     exit 1
   fi
 
-  # Compress backup directory
   if [ -e $BACKUP_ARCHIVE_PATH ]; then
     rm -rf $BACKUP_ARCHIVE_PATH
   fi
   tar -cvzf $BACKUP_ARCHIVE_PATH $BACKUP_PATH
 
-  # Push backup file to S3
   echo "Sending file to S3"
   if aws s3 rm s3://${S3_BUCKET}/${S3_PREFIX}latest.tgz; then
     echo "Removed latest backup from S3"
@@ -91,12 +80,10 @@ backup() {
     exit 1
   fi
 
-  echo "Done"
+  echo "Backup is finished!"
 }
 
-# Pull down the latest backup from S3 and restore it to the database
 restore() {
-  # Remove old backup file
   if [ -d $BACKUP_PATH ]; then
     echo "Removing out of date backup"
     rm -rf $BACKUP_PATH
@@ -105,7 +92,6 @@ restore() {
     echo "Removing out of date backup"
     rm -rf $BACKUP_ARCHIVE_PATH
   fi
-  # Get backup file from S3
   echo "Downloading latest backup from S3"
   if aws s3 cp s3://${S3_BUCKET}/${S3_PREFIX}latest.tgz $BACKUP_ARCHIVE_PATH; then
     echo "Downloaded"
@@ -114,10 +100,8 @@ restore() {
     exit 1
   fi
   mkdir -p $BACKUP_PATH
-  # Extract archive
   tar -xvzf $BACKUP_ARCHIVE_PATH -c $BACKUP_PATH
 
-  # Restore database from backup file
   echo "Running restore"
   if influx restore --host $INFLUXDB_HOST:$INFLUXDB_BACKUP_PORT --org $INFLUXDB_ORG --token $INFLUXDB_TOKEN --full $BACKUP_PATH ; then
     echo "Successfully restored"
@@ -129,7 +113,6 @@ restore() {
 
 }
 
-# Handle command line arguments
 case "$1" in
   "startcron")
     startcron "$CRON"
