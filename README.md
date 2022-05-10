@@ -29,7 +29,7 @@ services:
       INFLUXD_BIND_ADDRESS: ":8086"
 
   fluxbackup:
-    image: buraketmen/influxdb2-s3-backup:latest
+    image: ghcr.io/ledermann/influxdb2-s3-backup:latest
     networks:
       - flux-proxy
     environment:
