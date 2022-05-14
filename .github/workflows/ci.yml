@@ -41,3 +41,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Send webhook to start deployment
+        env:
+          DEPLOY_HOOK: ${{ secrets.DEPLOY_HOOK }}
+        if: env.DEPLOY_HOOK != null
+        run: curl -X POST ${{ env.DEPLOY_HOOK }}
