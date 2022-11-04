@@ -9,7 +9,7 @@ version: '3.5'
 
 services:
   influxdb:
-    image: influxdb:2.5.0
+    image: influxdb:2.5.1
     ports:
       - "8086:8086"
     networks:
