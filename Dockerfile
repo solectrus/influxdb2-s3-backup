@@ -1,6 +1,5 @@
-FROM influxdb:2.5.1
-
-RUN apt update -y && apt install awscli cron -y
+FROM influxdb:2.5-alpine
+RUN apk add --no-cache aws-cli
 
 COPY backup.sh /usr/bin/backup.sh
 RUN chmod u+x /usr/bin/backup.sh

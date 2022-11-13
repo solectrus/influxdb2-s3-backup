@@ -39,12 +39,11 @@ startcron() {
   echo "export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $HOME/.profile
   echo "Starting backup cron job with frequency '$1'"
 
-  echo "$1 . $HOME/.profile; $0 backup >> /var/log/cron.log 2>&1" > /etc/cron.d/influxdbbackup
+  echo "$1 . $HOME/.profile; $0 backup" > /var/spool/cron/crontabs/root
 
-  cat /etc/cron.d/influxdbbackup
-  crontab /etc/cron.d/influxdbbackup
-  touch /var/log/cron.log
-  cron && tail -f /var/log/cron.log
+  cat /var/spool/cron/crontabs/root
+  crontab /var/spool/cron/crontabs/root
+  crond -f -L /dev/stdout
 }
 
 backup() {
