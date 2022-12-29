@@ -11,11 +11,11 @@ services:
   influxdb:
     image: influxdb:2.5-alpine
     ports:
-      - "8086:8086"
+      - '8086:8086'
     networks:
       - flux-proxy
     environment:
-      DOCKER_INFLUXDB_INIT_MODE: "setup"
+      DOCKER_INFLUXDB_INIT_MODE: 'setup'
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUXDB_USERNAME}
       DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_PASSWORD}
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_TOKEN}
@@ -32,7 +32,7 @@ services:
       INFLUXDB_TOKEN: ${INFLUXDB_TOKEN}
       S3_BUCKET: 'S3_bucket_name'
       S3_PREFIX: 'influxdb_backup'
-      AWS_ACCESS_KEY_ID:  ${AWS_ACCESS_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_KEY}
       CRON: '0 0 * * 0'
 ```
