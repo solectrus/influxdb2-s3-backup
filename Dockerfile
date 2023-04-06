@@ -1,4 +1,4 @@
-FROM influxdb:2.6-alpine
+FROM influxdb:2.7-alpine
 RUN apk add --no-cache aws-cli
 
 COPY backup.sh /usr/bin/backup.sh
